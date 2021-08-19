@@ -14,7 +14,7 @@ def urlopen(url):
         try:
             res = urllib.request.urlopen(url)
             return res
-        except urllib.error.HTTPError as e:
+        except (urllib.error.HTTPError, urllib.error.URLError) as e:
             print(e)
             print("retrying after " + str(delay) + "s")
             time.sleep(delay)
