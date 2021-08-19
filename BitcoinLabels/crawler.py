@@ -76,8 +76,15 @@ def main():
         else:
             try:
                 id = sys.argv[1]
-                owner = results[int(id)]
-                fetch_addrs(owner, base_url+"/wallet/"+owner+"/addresses")
+                if "-" in id:
+                    start = int(id.split("-")[0])
+                    end = int(id.split("-")[1])
+                    for i in range(start, end):
+                        owner = results[int(i)]
+                        fetch_addrs(owner, base_url+"/wallet/"+owner+"/addresses")
+                else: 
+                    owner = results[int(id)]
+                    fetch_addrs(owner, base_url+"/wallet/"+owner+"/addresses")
             except:
                 if sys.argv in results:
                     fetch_addrs(sys.argv, base_url+"/wallet/"+owner+"/addresses")
