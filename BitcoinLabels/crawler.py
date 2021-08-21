@@ -45,6 +45,10 @@ def fetch_addrs(owner, addr_page):
         cur_page_num += 1 
         time.sleep(10)
         with urlopen(addr_page + "?page=" + str(cur_page_num)) as response:
+            raw = response.read()
+            encoding = response.headers.get_content_charset('utf-8')
+            html = raw.decode(encoding)
+            results = re.findall(r'page=([0-9]+)">Last', html)
             addrs = re.findall(r'href=[\'"]?/address/([^\'" >]+)', html)
             write_addr_label(owner, addrs)
             print(owner+ ": "+ str(cur_page_num) + "/" + str(total_page_num))
