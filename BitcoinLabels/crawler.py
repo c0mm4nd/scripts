@@ -35,7 +35,10 @@ def fetch_addrs(owner, addr_page):
         encoding = response.headers.get_content_charset('utf-8')
         html = raw.decode(encoding)
         results = re.findall(r'page=([0-9]+)">Last', html)
-        total_page_num = int(results[0])
+        if len(results) == 0:
+            print("failed to load the total page num")
+        else: 
+            total_page_num = int(results[0])
         
         addrs = re.findall(r'href=[\'"]?/address/([^\'" >]+)', html)
         write_addr_label(owner, addrs)
@@ -89,11 +92,12 @@ def main():
                 else: 
                     owner = results[int(id)]
                     fetch_addrs(owner, base_url+"/wallet/"+owner+"/addresses")
-            except:
+            except Exception as e:
                 if sys.argv in results:
                     fetch_addrs(sys.argv, base_url+"/wallet/"+owner+"/addresses")
                 else:
-                    print("invalid args")
+                    print(e)
+                    print("maybe invalid args")
                     print(sys.argv)
                     exit(0)
 
